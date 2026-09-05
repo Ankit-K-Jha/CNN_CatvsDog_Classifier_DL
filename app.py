@@ -2,25 +2,38 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-import matplotlib.pyplot as mp
-import sklearn
+import os
 
+# --------------------------------------------------
 # Load trained model
-model = tf.keras.models.load_model("cat_dog_cnn.keras")
+# --------------------------------------------------
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "cat_dog_cnn.keras")
+
+model = tf.keras.models.load_model(MODEL_PATH)
 
 
+# --------------------------------------------------
 # App title
+# --------------------------------------------------
+
 st.title("Cat vs Dog Classifier")
 
 st.write(
     "Upload an image and let the CNN predict whether it is a Cat or Dog."
 )
 
+
+# --------------------------------------------------
 # Upload image
+# --------------------------------------------------
+
 uploaded_file = st.file_uploader(
     "Upload an image",
     type=["jpg", "jpeg", "png"]
 )
+
 
 if uploaded_file is not None:
 
@@ -51,7 +64,10 @@ if uploaded_file is not None:
         verbose=0
     )[0][0]
 
+    # --------------------------------------------------
     # Result
+    # --------------------------------------------------
+
     if prediction >= 0.5:
         predicted_class = "Dog 🐶"
         confidence = prediction * 100
